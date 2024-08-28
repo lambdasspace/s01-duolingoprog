@@ -1,0 +1,214 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage{bussproofs} % Para reglas de inferencia
+\usepackage{listings}
+\usepackage{enumitem}
+
+\title{Evaluación Semanal 3}
+\author{Christian Eulogio Sánchez (320196872) \and Carlos Alonso Luna Rivera (318076814)}
+\date{27 de agosto de 2024}
+
+\begin{document}
+
+\maketitle
+
+\section*{Ejercicio 1}
+
+Dadas las expresiones en sintaxis concreta de \textbf{MiniLisp}, vamos a resolver los tres apartados solicitados:
+
+\subsection*{1.1 \texttt{(- (+ 20 3) (- -18 (+ 50 20)))}}
+
+\begin{itemize}
+    \item[(a)] \textbf{Sintaxis abstracta:}
+    \begin{align*}
+    \text{Sub}(
+        &\text{Add}(\text{Const}(20), \text{Const}(3)), \\
+        &\text{Sub}(\text{Const}(-18), \text{Add}(\text{Const}(50), \text{Const}(20)))
+    )
+    \end{align*}
+
+    \item[(b)] \textbf{Evaluación usando reglas de semántica natural:}
+    \begin{align*}
+    \text{Sub}(
+        &\text{Add}(20, 3),  \quad \text{(23)} \\
+        &\text{Sub}(-18, \text{Add}(50, 20))  \quad \text{(-88)}
+    )  \quad \text{Resultado: } 111
+    \end{align*}
+    
+    \item[(c)] \textbf{Evaluación usando reglas de semántica estructural:}
+    \begin{align*}
+    &(- (+ 20 3) (- -18 (+ 50 20))) \\
+    &(- 23 (- -18 70)) \\
+    &(- 23 -88) \\
+    &111 \quad \text{Resultado: } 111
+    \end{align*}
+\end{itemize}
+
+\subsection*{1.2 \texttt{(not (+ 1 (- 3 (+ -8 1))))}}
+
+\begin{itemize}
+    \item[(a)] \textbf{Sintaxis abstracta:}
+    \begin{align*}
+    \text{Not}(
+        &\text{Add}(\text{Const}(1), \text{Sub}(\text{Const}(3), \text{Add}(\text{Const}(-8), \text{Const}(1))))
+    )
+    \end{align*}
+
+    \item[(b)] \textbf{Evaluación usando reglas de semántica natural:}
+    \begin{align*}
+    \text{Not}(
+        &\text{Add}(1, \text{Sub}(3, \text{Add}(-8, 1))) \quad \text{(Resultado: } 11)
+    ) \quad \text{Resultado: } \text{False}
+    \end{align*}
+
+    \item[(c)] \textbf{Evaluación usando reglas de semántica estructural:}
+    \begin{align*}
+    &(not (+ 1 (- 3 (+ -8 1)))) \\
+    &(not (+ 1 (- 3 -7))) \\
+    &(not (+ 1 10)) \\
+    &(not 11) \\
+    &\text{False} \quad \text{Resultado: } \text{False}
+    \end{align*}
+\end{itemize}
+
+\subsection*{1.3 \texttt{(not (not (+ 3 5)))}}
+
+\begin{itemize}
+    \item[(a)] \textbf{Sintaxis abstracta:}
+    \begin{align*}
+    \text{Not}(
+        &\text{Not}(\text{Add}(\text{Const}(3), \text{Const}(5)))
+    )
+    \end{align*}
+
+    \item[(b)] \textbf{Evaluación usando reglas de semántica natural:}
+    \begin{align*}
+    \text{Not}(
+        &\text{Not}(\text{Add}(3, 5)) \quad \text{(Resultado: } 8)
+    ) \quad \text{Resultado: } \text{True}
+    \end{align*}
+    
+    \item[(c)] \textbf{Evaluación usando reglas de semántica estructural:}
+    \begin{align*}
+    &(not (not (+ 3 5))) \\
+    &(not (not 8)) \\
+    &(not \text{False}) \\
+    &\text{True} \quad \text{Resultado: } \text{True}
+    \end{align*}
+\end{itemize}
+
+\section*{Ejercicio 2}
+
+\subsection*{*}
+\begin{enumerate}[label = (\alph*)]
+    \item $<$ Expr $>$ ::= \ldots \\
+          $|$  (* $<$Expr$>$ $<$Expr$>$)
+
+    \item Representaremos la multiplicación con la etiqueta $Mult$.\\
+    $\frac{i\text{ASA}\qquad j\text{ASA}}{Mult(i,j)\text{ASA}}$
+    
+    \item Paso Grande: \begin{center}
+        $\frac{e\Rightarrow Num(n)\quad f\Rightarrow Num(n)}{Mult(e,f)\Rightarrow Num(n)}$
+    \end{center}
+
+    Paso Pequeño: \begin{center}
+        $\frac{e\rightarrow e'}{Mult(e,f)\rightarrow Mult(e',f))}$
+        $\frac{f\rightarrow f'}{Mult(Num(n),f)\rightarrow Mult(Num(n),f'))}$
+        $\frac{}{Mult(Num(n_1),Num(n_2))\rightarrow Mult(n_1*n_2)}$
+    \end{center}
+\end{enumerate}
+
+\subsection*{/}
+\begin{enumerate}[label = (\alph*)]
+    \item $<$ Expr $>$ ::= \ldots \\
+          $|$ (/ $<$Expr$>$ $<$Expr$>$)
+          $|$ $<\text{ String }>$
+
+          $<\text{ String }>$ ::= \{$<\text{ A }>$\}\{$<\text{ a }>$\}
+
+          $<\text{ A }>$ ::= A $|$ B $|$ C $|$ D $|$ E $|$ F $|$ G $|$ H $|$ I $|$ J $|$ K $|$ L $|$ M $|$ N $|$ O $|$ P $|$ Q $|$ R $|$ S $|$ T $|$ V $|$ W $|$ X $|$ Y $|$ Z $|$   $|$ $\epsilon$
+
+          $<\text{ a }>$ ::= a $|$ b $|$ c $|$ d $|$ e $|$ f $|$ g $|$ h $|$ i $|$ j $|$ k $|$ l $|$ m $|$ n $|$ o $|$ p $|$ q $|$ r $|$ s $|$ t $|$ v $|$ w $|$ x $|$ y $|$ z $|$   $|$ $\epsilon$
+
+
+    \item Representaremos la división con la etiqueta $Div$.\\
+    $\frac{i\text{ASA}\qquad j\text{ASA}}{Div(i,j)\text{ASA}}$
+    Y representaremos las cadenas con la etiqueta $String$.\\
+    $\frac{s \in \Sigma^*}{String(s)\text{ASA}}$\\
+    Donde $\Sigma$ = \{A-Z\}$\cup$\{a-z\}$\cup$\{" "\}
+    
+    \item Paso Grande: \begin{center}
+        $\frac{f\Rightarrow Num(0)}{Mult(e,f)\Rightarrow String(s)}$\\
+        $\frac{e\Rightarrow Num(n)\quad f\Rightarrow Num(n)}{Div(e,f)\Rightarrow Num(n)}$
+    \end{center}
+    
+    Paso Pequeño: \begin{center}
+        $\frac{f\rightarrow Num(0)}{Mult(e,f)\rightarrow String(s)}$
+        $\frac{e\rightarrow e'}{Div(e,f)\rightarrow Div(e',f))}$
+        $\frac{f\rightarrow f'}{Div(Num(n),f)\rightarrow Div(Num(n),f'))}$
+        $\frac{}{Div(Num(n_1),Num(n_2))\rightarrow Div(n_1/n_2)}$
+    \end{center}
+\end{enumerate}
+
+
+\subsection*{add1}
+\begin{enumerate}[label = (\alph*)]
+    \item $<$ Expr $>$ ::= \ldots \\
+          $|$ (add1 $<$Expr$>$)
+    
+    \item Representaremos add1 con la etiqueta $Add1$.\\
+    $\frac{i\text{ASA}}{Add1(i)\text{ASA}}$
+    
+    \item Paso Grande: \begin{center}
+        $\frac{e\Rightarrow Num(n)}{Add1(e)\Rightarrow Num(n)}$
+    \end{center}
+    
+    Paso Pequeño: \begin{center}
+        $\frac{e\rightarrow e'}{Add1(e)\rightarrow Add1(e')}$
+        $\frac{e\rightarrow Num(n)}{Add1(e)\rightarrow Add(n,1)}$
+    \end{center}
+\end{enumerate}
+
+\subsection*{sub1}
+\begin{enumerate}[label = (\alph*)]
+    \item $<$ Expr $>$ ::= \ldots \\
+          $|$ (sub1 $<$Expr$>$)
+
+    
+    \item Representaremos sub1 con la etiqueta $Sub1$.\\
+    $\frac{i\text{ASA}}{Sub1(i)\text{ASA}}$
+
+    \item Paso Grande: \begin{center}
+        $\frac{e\Rightarrow Num(n)}{Sub1(e)\Rightarrow Num(n)}$
+    \end{center}
+    
+    Paso Pequeño: \begin{center}
+        $\frac{e\rightarrow e'}{Sub1(e)\rightarrow Sub1(e')}$
+        $\frac{e\rightarrow Num(n)}{Sub1(e)\rightarrow Sub(n,1)}$
+    \end{center}
+\end{enumerate}
+
+\subsection*{sqrt}
+\begin{enumerate}[label = (\alph*)]
+    \item $<$ Expr $>$ ::= \ldots \\
+          $|$ (sqrt $<$Expr$>$)
+
+    
+    \item Representaremos la raíz cuadrada con la etiqueta $Sqrt$.\\
+    $\frac{i\text{ASA}}{Sqrt(i)\text{ASA}}$
+
+    \item Paso Grande: \begin{center}
+        $\frac{e\Rightarrow Num(n)<Num(0)}{Sqrt(e)\Rightarrow String(s)}$
+        $\frac{e\Rightarrow Num(n)}{Sqrt(e)\Rightarrow Num(n)}$
+    \end{center}
+    
+    Paso Pequeño: \begin{center}
+        $\frac{f\rightarrow Num(n)<Num(0)}{Sqrt(e)\rightarrow String(s)}$
+        $\frac{e\rightarrow e'}{Sqrt(e)\rightarrow Sqrt(e')}$
+        $\frac{}{Sqrt(Num(n))\rightarrow sqrt(n)}$
+    \end{center}
+\end{enumerate}
+
+
+\end{document}
